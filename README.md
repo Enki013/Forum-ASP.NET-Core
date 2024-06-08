@@ -1,7 +1,3 @@
-Tabii ki, işte İngilizceye çevrilmiş ayrıntılı README dosyası:
-
----
-
 # Forum
 
 ## Project Description
@@ -26,37 +22,29 @@ Follow these steps to run the project locally:
 
 1\. **Clone the Repository:**
 
-    ```sh
-
+```sh
     git clone https://github.com/username/forum.git
 
     cd forum
-
-    ```
+```
 
 2\. **Install Required Packages:**
 
-    ```sh
-
+```sh
     dotnet restore
-
-    ```
+```
 
 3\. **Update the Database:**
 
-    ```sh
-
+```sh
     dotnet ef database update
-
-    ```
+```
 
 4\. **Run the Application:**
 
-    ```sh
-
+```sh
     dotnet run
-
-    ```
+```
 
 ## Usage
 
@@ -90,8 +78,5 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## Contact
 
-For any questions or feedback, please contact us at [email@example.com](mailto:email@example.com).
+For any questions or feedback, please contact us at [enki0013@gmail.com](mailto:enki0013@gmail.com).
 
----
-
-Bu metin, projenin genel özelliklerini, kurulum adımlarını, kullanımını ve diğer önemli bilgileri içermektedir.
