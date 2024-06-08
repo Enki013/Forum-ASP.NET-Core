@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This project is a forum web application created using Asp.Net Core 2.2. Users can join forums, create posts, and comment.
+This project is a forum web application created using Asp.Net Core Users can join forums, create posts, and comment.
 
 ## Features
 
