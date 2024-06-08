@@ -23,7 +23,7 @@ Follow these steps to run the project locally:
 1\. **Clone the Repository:**
 
 ```sh
-    git clone https://github.com/username/forum.git
+    git clone https://github.com/enki013/Forum-ASP.NET-Core.git
 
     cd forum
 ```
