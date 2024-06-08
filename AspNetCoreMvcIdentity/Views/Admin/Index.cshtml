@@ -1,0 +1,90 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<h1>Admin Panel</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Kullanıcı Bilgileri</div>
+            <div class="card-body">
+                <p>Toplam Kullanıcı: @Model.TotalUsers</p>
+                <p>Aktif Kullanıcı: @Model.ActiveUsers</p>
+                <p>Admin Sayısı: @Model.AdminUsers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Post Bilgileri</div>
+            <div class="card-body">
+                <p>Toplam Post: @Model.TotalPosts</p>
+                <p>Yorum Sayısı: @Model.TotalReplies</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">Forum Bilgileri</div>
+            <div class="card-body">
+                <p>Toplam Forum: @Model.TotalForums</p>
+                <p>Toplam Görüntüleme: @Model.TotalViews</p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">Kullanıcı Listesi</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Kullanıcı Adı</th>
+                        <th>Email</th>
+                        <th>Üyelik Tarihi</th>
+                        <th>Durum</th>
+                        <th>UserType</th>
+                        <th>Rolü Güncelle</th>
+                        <th>Aktif/Pasif Yap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.MemberSince.ToString("dd/MM/yyyy")</td>
+                            <td>@(user.IsActive ? "Aktif" : "Pasif")</td>
+                            <td>@user.UserType</td>
+                            <td>
+                                <form asp-action="SetUserRole" method="post">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <select name="role" class="form-control">
+                                        <option value="Admin">Admin</option>
+                                        <option value="Standard">Standard</option>
+                                        <option value="Expert">Expert</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary mt-2">Rolü Güncelle</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form asp-action="UpdateUserStatus" method="post" class="mt-2">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <input type="hidden" name="isActive" value="@(user.IsActive ? "false" : "true")" />
+                                    <button type="submit" class="btn btn-secondary">
+                                        @(user.IsActive ? "Pasif Yap" : "Aktif Yap")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model AspNetCoreMvcIdentity.Models.PostViewModels.PostIndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@Model.Title</h1>
+<a asp-controller="Forum" asp-action="Details" asp-route-id="@Model.ForumId">Back to forum</a>
+
+<div class="card">
+    <div class="card-body row">
+        <div class="col-2 text-center">
+            <img src="@Url.Content(Model.AuthorImageUrl ?? "/images/users/default.png")" width="60px" />
+            <br />
+            <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
+            <br />
+            <p class="badge badge-dark" style="width: 60px;">@Model.UserType</p>
+            <br />
+            Points: (@Model.AuthorRating)
+        </div>
+        <div class="col-10">
+            <p class="card-text"> @Html.Raw(Model.PostContent)</p>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        Posted on: @Model.Created
+    </div>
+</div>
+
+<br />
+
+@if (Model.Replies.Any())
+{
+    foreach (var reply in Model.Replies)
+    {
+        <br />
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-2 text-center">
+                    <img src="@Url.Content(reply.AuthorImageUrl ?? "/images/users/default.png")" width="60px" />
+                    <br />
+                    <a asp-controller="Profile" asp-action="Details" asp-route-id="@reply.AuthorId">@reply.AuthorName</a>
+                    <br />
+                    <p class="badge badge-dark" style="width: 60px;">@reply.UserType</p>
+                    <br />
+                    Points: (@reply.AuthorRating)
+                </div>
+                <div class="col-10">
+                    @if (reply.QuotedReplyId.HasValue)
+{
+    <blockquote class="blockquote">
+        <footer class="blockquote-footer">From <cite title="Source Title"><a asp-controller="Post" asp-action="Index" asp-route-id="@reply.QuotedReplyId">@Html.Raw(reply.QuotedReplyContent)</a></cite></footer>
+    </blockquote>
+}
+                    <p class="card-text"> @Html.Raw(reply.ReplyContent)</p>
+                    <a asp-controller="Reply" asp-action="Create" asp-route-id="@Model.Id" asp-route-parentReplyId="@reply.Id" asp-route-quotedReplyId="@reply.Id">Reply</a>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Posted on: @reply.Created
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center text-primary">
+        <h3>There are no replies to this post</h3>
+    </div>
+}
+
+<br />
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <span><a class="btn btn-dark" asp-controller="Reply" asp-action="Create" asp-route-id="@Model.Id">Add a Reply</a></span>
+    </div>
+}
+else
+{
+    <p class="text-center text-dark">
+        You must be a registered user to add a reply.
+        <a class=" text-primary" asp-controller="Account" asp-action="Login">Login</a> or
+        <a class=" text-primary" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+        now.
+    </p>
+}
