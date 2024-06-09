@@ -24,9 +24,6 @@
     </div>
 
     @if (Context.User.Identity.IsAuthenticated)
-
-
-
     {
         <div class="row ">
             <div class="col-md-4 text-center">
@@ -39,9 +36,6 @@
                         <h5 class="card-title">@Model.UserName</h5>
                         <p class="card-text">
                             @if (@Model.IsAdmin)
-
-
-
                             {
                                 <span class="badge badge-dark">Admin</span>
                                 <br />
@@ -53,8 +47,11 @@
                             <span id="userActiveLabel">
                                 <p>User Type: @ViewData["UserType"]</p>
                         </p>
-                        <a asp-controller="Manage" asp-action="Index" asp-route-id="@Model.UserId"
-                            class="btn btn-warning">Manage your account</a>
+
+                       @if (User.Identity.Name == @Model.UserName)
+{
+    <a asp-controller="Manage" asp-action="Index" asp-route-id="@Model.UserId" class="btn btn-warning">Manage your account</a>
+}
                     </div>
                 </div>
             </div>

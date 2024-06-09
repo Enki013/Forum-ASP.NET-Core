@@ -25,6 +25,11 @@ namespace AspNetCoreMvcIdentity.Controllers
         public IActionResult Results(string searchQuery)
         {
 
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                return View(); // Boşsa hiçbir şey yapma
+            }
+
             var posts = _post.GetFilteredPosts(searchQuery);
 
 
@@ -70,6 +75,10 @@ namespace AspNetCoreMvcIdentity.Controllers
         [HttpPost]
         public IActionResult Search(string searchQuery)
         {
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                return View(); // Boşsa hiçbir şey yapma
+            }
             return RedirectToAction("Results", new { searchQuery });
         }
     }
