@@ -3,7 +3,7 @@
     ViewData["Title"] = "Results";
 }
 
-<h1>Search results for: @Model.SearchQuery</h1>
+<h1>Search results for: @Model?.SearchQuery</h1>
 
 
 
@@ -19,7 +19,7 @@
                 </div>
     </form>
 </div>
-@if (Model.Posts.Any())
+@if (Model?.Posts?.Any() == true)
 {
 
     <table class="table table-bordered table-hover">
