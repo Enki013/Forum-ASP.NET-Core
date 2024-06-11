@@ -94,9 +94,6 @@ Follow these steps to run the project locally:
 
 To contribute, please send a pull request or open an issue.
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
 
 ## Contact
 
