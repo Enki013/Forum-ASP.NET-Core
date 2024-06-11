@@ -25,7 +25,7 @@ Follow these steps to run the project locally:
 ```sh
     git clone https://github.com/enki013/Forum-ASP.NET-Core.git
 
-    cd forum
+    cd Forum-ASP.NET-Core
 ```
 
 2\. **Install Required Packages:**
@@ -75,7 +75,7 @@ Follow these steps to run the project locally:
 ### Create Forum
 <img src="https://github.com/Enki013/Forum-ASP.NET-Core/assets/39771190/1e5109d5-88bf-43b5-9262-2f055b84002e" width="50%">
 
-### Main Page
+### Admin Panel
 <img src="https://github.com/Enki013/Forum-ASP.NET-Core/assets/39771190/8a05941a-1f5e-4df1-98f4-be809df861ec" width="50%">
 
 ### Profile Details
