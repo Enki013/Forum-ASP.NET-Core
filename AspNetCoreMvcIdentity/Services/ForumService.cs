@@ -8,20 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreMvcIdentity.Services
 {
-    public class ForumService : IForum
+    public class ForumService(ApplicationDbContext context) : IForum
     {
+        private readonly ApplicationDbContext _context = context;
 
-        private readonly ApplicationDbContext _context;
-
-        public ForumService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
         public async Task Create(Forum forum)
         {
             _context.Add(forum);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task Delete(int forumId)
         {

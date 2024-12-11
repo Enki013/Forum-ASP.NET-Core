@@ -9,7 +9,7 @@
 <div class="card">
     <div class="card-body row">
         <div class="col-2 text-center">
-            <img src="@Url.Content(Model.AuthorImageUrl ?? "/images/users/default.png")" width="60px" />
+            <img src="@Model.AuthorImageUrl" width="60px" />
             <br />
             <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
             <br />
@@ -33,10 +33,10 @@
     foreach (var reply in Model.Replies)
     {
         <br />
-        <div class="card">
+        <div class="card" id="reply-@reply.Id">
             <div class="card-body row">
                 <div class="col-2 text-center">
-                    <img src="@Url.Content(reply.AuthorImageUrl ?? "/images/users/default.png")" width="60px" />
+                    <img src="@reply.AuthorImageUrl" width="60px" />
                     <br />
                     <a asp-controller="Profile" asp-action="Details" asp-route-id="@reply.AuthorId">@reply.AuthorName</a>
                     <br />
@@ -48,7 +48,9 @@
                     @if (reply.QuotedReplyId.HasValue)
 {
     <blockquote class="blockquote">
-        <footer class="blockquote-footer">From <cite title="Source Title"><a asp-controller="Post" asp-action="Index" asp-route-id="@reply.QuotedReplyId">@Html.Raw(reply.QuotedReplyContent)</a></cite></footer>
+        <footer class="blockquote-footer">From <cite title="Source Title">
+            <a href="#reply-@reply.QuotedReplyId">@Html.Raw(reply.QuotedReplyContent)</a>
+        </cite></footer>
     </blockquote>
 }
                     <p class="card-text"> @Html.Raw(reply.ReplyContent)</p>

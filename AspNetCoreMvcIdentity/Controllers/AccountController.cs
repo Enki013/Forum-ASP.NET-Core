@@ -224,7 +224,15 @@ namespace AspNetCoreMvcIdentity.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, MemberSince = DateTime.Now, UserType = model.UserType, IsActive = true }; // Kullanıcıyı aktif olarak ayarla
+                var user = new ApplicationUser 
+                { 
+                    UserName = model.UserName, 
+                    Email = model.Email, 
+                    MemberSince = DateTime.Now, 
+                    UserType = model.UserType, 
+                    IsActive = true
+                    // ProfileImageUrl will be null by default
+                };
                 if (model.UserType == "Expert" && model.Certificate != null)
                 {
                     using (var memoryStream = new MemoryStream())

@@ -29,29 +29,40 @@ namespace AspNetCoreMvcIdentity.Controllers
         public async Task<IActionResult> Create(int id, int? parentReplyId, int? quotedReplyId)
         {
             var post = _post.GetById(id);
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            var postAuthor = post.User;
+
             var model = new PostReplyModel
             {
-                PostContent = post.Content,
-                PostTitle = post.Title,
                 PostId = post.Id,
-                AuthorId = user.Id.ToString(),
-                AuthorName = User.Identity.Name,
-                AuthorImageUrl = user.ProfileImageUrl,
-                AuthorRating = user.Rating,
-                IsAuthorAdmin = User.IsInRole("Admin"),
-                Created = DateTime.Now,
+                PostTitle = post.Title,
+                PostContent = post.Content,
+                AuthorId = postAuthor.Id.ToString(),
+                AuthorName = postAuthor.UserName,
+                AuthorImageUrl = postAuthor.GetProfileImageUrl(),
+                AuthorRating = postAuthor.Rating,
+                IsAuthorAdmin = await _userManager.IsInRoleAsync(postAuthor, "Admin"),
+                Created = post.Created,
                 ForumId = post.Forum.Id,
-                ForumName = post.Forum.ImageUrl,
+                ForumName = post.Forum.Title,
                 ForumImageUrl = post.Forum.ImageUrl,
-                ParentReplyId = parentReplyId
+                ParentReplyId = parentReplyId,
+                UserType = postAuthor.UserType
             };
 
             if (quotedReplyId.HasValue)
             {
                 var quotedReply = _post.GetReplyById(quotedReplyId.Value);
-                model.QuotedReplyId = quotedReply.Id;
-                model.QuotedReplyContent = quotedReply.Content;
+                if (quotedReply != null)
+                {
+                    model.QuotedReplyId = quotedReply.Id;
+                    model.QuotedReplyContent = quotedReply.Content;
+                }
             }
 
             return View(model);

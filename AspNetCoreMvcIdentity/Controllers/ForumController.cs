@@ -50,26 +50,16 @@ namespace AspNetCoreMvcIdentity.Controllers
         {
             var forum = _forum.GetById(id);
             var model = BuildForumListing(forum);
-
             return View(model);
-
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        
-        public  IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            
-
             _forum.Delete(id);
             return RedirectToAction("Index");
-
-
         }
-
-
-
 
         public IActionResult Details(int id, string searchQuery)
         {

@@ -54,12 +54,12 @@ namespace AspNetCoreMvcIdentity.Services
 
         public Post GetById(int id)
         {
-            return _context.Posts.Where(p => p.Id == id)
+            return _context.Posts
                 .Include(p => p.User)
-                .Include(p => p.Replies).ThenInclude(r => r.User)
+                .Include(p => p.Replies)
+                    .ThenInclude(r => r.User)
                 .Include(p => p.Forum)
-                .First();
-
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Post> GetFilteredPosts(Forum forum, string searchQuery)
