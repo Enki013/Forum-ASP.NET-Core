@@ -37,11 +37,11 @@ namespace AspNetCoreMvcIdentity.Controllers
                 UserName = user.UserName,
                 UserRating = user.Rating.ToString(),
                 Email = user.Email,
-                ProfileImageUrl = isAdmin ? "/images/users/admin.png" : (user.ProfileImageUrl ?? "/images/users/default.png"),
+                ProfileImageUrl = isAdmin ? "/images/users/admin.png" : user.GetProfileImageUrl(),
                 MemberSince = user.MemberSince,
-                IsAdmin = isAdmin
+                IsAdmin = isAdmin,
+                UserType = user.UserType
             };
-            ViewData["UserType"] = user.UserType; // UserType bilgisini ekleyin
             return View(model);
         }
         //[HttpPost]
@@ -61,8 +61,9 @@ namespace AspNetCoreMvcIdentity.Controllers
                 UserName = u.UserName,
                 ProfileImageUrl = u.ProfileImageUrl,
                 UserRating = u.Rating.ToString(),
-                MemberSince = u.MemberSince
-
+                MemberSince = u.MemberSince,
+                IsAdmin = _userManager.GetRolesAsync(u).Result.Contains("Admin"),
+                UserType = u.UserType
             });
 
             var model = new ProfileListModel

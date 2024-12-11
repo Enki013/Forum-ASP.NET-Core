@@ -16,5 +16,6 @@ namespace AspNetCoreMvcIdentity.Models.ApplicationUserViewModels
         public DateTime MemberSince { get; set; }
         public IFormFile ImageUpload { get; set; }
         public bool IsAdmin { get; set; }
+        public string UserType { get; set; }
     }
 }

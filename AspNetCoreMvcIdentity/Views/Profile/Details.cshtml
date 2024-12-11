@@ -45,7 +45,7 @@
                             <span id="userEmailLabel">Email: @Model.Email</span> <br />
                             <span id="userCreatedLabel">Member Since: @Model.MemberSince</span> <br />
                             <span id="userActiveLabel">
-                                <p>User Type: @ViewData["UserType"]</p>
+                                <p>User Type: @Model.UserType</p>
                         </p>
 
                        @if (User.Identity.Name == @Model.UserName)

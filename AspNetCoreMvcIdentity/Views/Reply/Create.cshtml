@@ -32,6 +32,11 @@
                     <br />
                     <p class="badge badge-dark" style="width: 60px;">Admin</p>
                 }
+                @if (Model.UserType == "Expert")
+                {
+                    <br />
+                    <p class="badge badge-dark" style="width: 60px;">Expert</p>
+                }
                 <br />
                 Points: (@Model.AuthorRating)
 
@@ -44,9 +49,12 @@
                 {
                     <blockquote class="blockquote">
                         <p class="mb-0">şu yorumdan alıntı: @Html.Raw(Model.QuotedReplyContent)</p>
-                        <footer class="blockquote-footer">From <cite title="Source Title"><a asp-controller="Post"
-                                    asp-action="Index" asp-route-id="@Model.QuotedReplyId">@Html.Raw(Model.PostTitle)</a></cite>
-                        </footer>
+                        <footer class="blockquote-footer">From <cite title="Source Title">
+                            <a asp-controller="Post" 
+                               asp-action="Index" 
+                               asp-route-id="@Model.PostId"
+                               asp-fragment="reply-@Model.QuotedReplyId">@Html.Raw(Model.PostTitle)</a>
+                        </cite></footer>
                     </blockquote>
                 }
                 <p class="card-text"> @Html.Raw(Model.PostContent)</p>

@@ -35,11 +35,17 @@ namespace AspNetCoreMvcIdentity.Controllers
         public async Task<IActionResult> IndexAsync(int id)
         {
             var post = _post.GetById(id);
-            post.Views += 1; // Görüntülenme sayısını artır
-            await _post.Update(post); // Değişiklikleri kaydet
+            
+            if (post == null)
+            {
+                return NotFound();
+            }
+            
+            post.Views += 1;
+            await _post.Update(post);
 
             var replies = BuildPostReplies(post.Replies);
-
+            
             var model = new PostIndexModel
             {
                 Id = post.Id,
@@ -52,10 +58,11 @@ namespace AspNetCoreMvcIdentity.Controllers
                 Replies = replies,
                 ForumId = post.Forum.Id,
                 ForumName = post.Forum.Title,
-                AuthorImageUrl = post.User.ProfileImageUrl ?? "/images/users/default.png",
+                AuthorImageUrl = post.User.GetProfileImageUrl(),
                 IsAuthorAdmin = await IsAuthorAdmin(post.User),
-                UserType = post.User.UserType // Bu satırı ekleyin
+                UserType = post.User.UserType
             };
+            
             return View(model);
         }
 
@@ -71,7 +78,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 Id = r.Id,
                 AuthorName = r.User.UserName,
                 AuthorId = r.User.Id.ToString(),
-                AuthorImageUrl = r.User.ProfileImageUrl ?? "/images/users/default.png",
+                AuthorImageUrl = r.User.GetProfileImageUrl(),
                 AuthorRating = r.User.Rating,
                 Created = r.Created,
                 ReplyContent = r.Content,
@@ -120,12 +127,13 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         public IActionResult DeleteConfirmed(int id)
         {
+    // Bu satırlar, silinecek postun hangi foruma ait olduğunu buluyor
 
-            // var redirect = _post.GetById(id).Forum.Id;
-
-            // _post.Delete(id);
-            // return RedirectToAction("Details", "Forum", new { id = redirect   });
-
+          //  var redirect = _post.GetById(id).Forum.Id;
+    // Postu siliyor ve kullanıcıyı o forumun detay sayfasına yönlendiriyor
+            //_post.Delete(id);
+           //  return RedirectToAction("Details", "Forum", new { id = redirect   });
+    // Şu anki aktif kod: Postu siliyor ve ana sayfaya yönlendiriyor
             _post.Delete(id).Wait();
             return RedirectToAction("Index", "Home");
 

@@ -6,11 +6,19 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCoreMvcIdentity.Models
 {
+
+// Rating: Kullanıcı puanı
+// ProfileImageUrl: Profil resmi yolu
+// MemberSince: Üyelik tarihi
+// IsActive: Kullanıcı aktiflik durumu
+// UserType: Kullanıcı tipi (Standard/Expert)
+// Certificate: Uzman kullanıcılar için sertifika
+
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser<long>
     {
         public int Rating { get; set; }
-        public string ProfileImageUrl { get; set; }
+        public string? ProfileImageUrl { get; set; }
         public DateTime MemberSince { get; set; }
         public bool IsActive { get; set; }
         public ICollection<Post> Posts { get; set; }

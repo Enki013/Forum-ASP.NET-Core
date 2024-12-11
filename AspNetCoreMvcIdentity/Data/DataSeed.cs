@@ -32,6 +32,9 @@ namespace AspNetCoreMvcIdentity.Data
                 LockoutEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ProfileImageUrl = "/images/users/admin.png",
+                MemberSince = DateTime.Now,
+                IsActive = true,
+                UserType = "Admin"
             };
 
             var hasher = new PasswordHasher<ApplicationUser>();
@@ -45,7 +48,7 @@ namespace AspNetCoreMvcIdentity.Data
             if (!_context.Users.Any(u => u.NormalizedUserName == user.NormalizedUserName))
             {
                 await userStore.CreateAsync(user);
-                await userStore.AddToRoleAsync(user, "Admin"); // Rol ataması burada
+                await userStore.AddToRoleAsync(user, "Admin");
             }
 
             await _context.SaveChangesAsync();

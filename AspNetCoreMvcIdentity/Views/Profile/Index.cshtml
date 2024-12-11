@@ -1,13 +1,9 @@
 ﻿@model  AspNetCoreMvcIdentity.Models.ApplicationUserViewModels.ProfileListModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
-<h1>Index</h1>
-
-<div class="row">
-    List of all users
-</div>
+<h1>Users</h1>
 
 <div class="row">
     <table class="table table-bordered table-hover">
@@ -17,21 +13,32 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Member Since</th>
-                <th>Rating </th>
+                <th>Rating</th>
+                <th>User Type</th>
             </tr>
         </thead>
         <tbody>
-            @foreach( var user in Model.Profiles)
+            @foreach(var user in Model.Profiles)
             {
                 <tr>
-                    <td><img src="@user.ProfileImageUrl" width="50px" alt="Profile Image"/></td>
+                    <td>
+                        @if (user.IsAdmin)
+                        {
+                            <img src="/images/users/admin.png" width="50px" class="rounded-circle" alt="Admin Profile"/>
+                        }
+                        else
+                        {
+                            <img src="@(string.IsNullOrEmpty(user.ProfileImageUrl) ? "/images/users/default.png" : user.ProfileImageUrl)" 
+                                 width="50px" class="rounded-circle" alt="User Profile"/>
+                        }
+                    </td>
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
-                    <td>@user.MemberSince</td>
+                    <td>@user.MemberSince.ToString("dd/MM/yyyy")</td>
                     <td>@user.UserRating</td>
+                    <td>@user.UserType</td>
                 </tr>
             }
         </tbody>
     </table>
-
 </div>
