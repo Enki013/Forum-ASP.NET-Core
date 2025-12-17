@@ -40,7 +40,8 @@ namespace AspNetCoreMvcIdentity.Controllers
                 ProfileImageUrl = isAdmin ? "/images/users/admin.png" : user.GetProfileImageUrl(),
                 MemberSince = user.MemberSince,
                 IsAdmin = isAdmin,
-                UserType = user.UserType
+                UserType = user.UserType,
+                StatusMessage = user.StatusMessage
             };
             return View(model);
         }

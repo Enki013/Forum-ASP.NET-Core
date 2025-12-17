@@ -21,5 +21,9 @@ namespace AspNetCoreMvcIdentity.Models.ManageViewModels
         public string? PhoneNumber { get; set; }
 
         public string? StatusMessage { get; set; }
+
+        [Display(Name = "Status Message")]
+        [StringLength(200, ErrorMessage = "Status mesajı en fazla 200 karakter olabilir.")]
+        public string? UserStatusMessage { get; set; }
     }
 }

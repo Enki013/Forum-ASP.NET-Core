@@ -23,5 +23,6 @@ namespace AspNetCoreMvcIdentity.Models
         public ICollection<Post> Posts { get; set; }
         public ICollection<PostReply> Replies { get; set; }
         public string? UserType { get; set; } // "Admin", "Mod", or "User"
+        public string? StatusMessage { get; set; } // User's profile status message
     }
 }

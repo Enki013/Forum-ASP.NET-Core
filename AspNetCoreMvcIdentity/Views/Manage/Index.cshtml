@@ -64,6 +64,12 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="UserStatusMessage"></label>
+                <textarea asp-for="UserStatusMessage" class="form-control" rows="3" placeholder="Profilinizde görünecek durum mesajı..."></textarea>
+                <small class="form-text text-muted">En fazla 200 karakter</small>
+                <span asp-validation-for="UserStatusMessage" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-default">Save</button>
         </form>
     </div>

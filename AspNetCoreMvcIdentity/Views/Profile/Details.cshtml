@@ -47,6 +47,14 @@
                             <span id="userActiveLabel">
                                 <p>User Type: @Model.UserType</p>
                             </span>
+                            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+                            {
+                                <div class="mt-3 p-2 bg-light rounded">
+                                    <i class="fa fa-quote-left text-muted"></i>
+                                    <span class="font-italic">@Model.StatusMessage</span>
+                                    <i class="fa fa-quote-right text-muted"></i>
+                                </div>
+                            }
                         </p>
 
                        @if (User.Identity.Name == @Model.UserName)

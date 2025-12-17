@@ -62,7 +62,8 @@ namespace AspNetCoreMvcIdentity.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                UserStatusMessage = user.StatusMessage
             };
 
             return View(model);
@@ -100,6 +101,17 @@ namespace AspNetCoreMvcIdentity.Controllers
                 if (!setPhoneResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
+                }
+            }
+
+            // Update Status Message
+            if (model.UserStatusMessage != user.StatusMessage)
+            {
+                user.StatusMessage = model.UserStatusMessage;
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred updating status message for user with ID '{user.Id}'.");
                 }
             }
 
