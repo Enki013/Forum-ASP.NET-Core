@@ -5,54 +5,83 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<style>
+    .validation-list {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 10px 0;
+        font-size: 0.85em;
+        display: none;
+    }
+    .validation-list.show {
+        display: block;
+    }
+    .validation-list li {
+        padding: 2px 0;
+    }
+    .validation-list li i {
+        margin-right: 5px;
+        width: 16px;
+    }
+    .valid {
+        color: #28a745;
+    }
+    .invalid {
+        color: #dc3545;
+    }
+</style>
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" oninput="validateEmail()" />
+                <ul class="validation-list" id="emailValidation">
+                    <li id="emailFormat"><i class="fa fa-times invalid"></i> Geçerli email formatı</li>
+                </ul>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>  
             <div class="form-group">
                 <label asp-for="UserName"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input asp-for="UserName" class="form-control" oninput="validateUsername()" />
+                <ul class="validation-list" id="usernameValidation">
+                    <li id="usernameLength"><i class="fa fa-times invalid"></i> En az 6 karakter</li>
+                </ul>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password"></label>
                 <div class="input-group">
-                    <input asp-for="Password" class="form-control" />
+                    <input asp-for="Password" class="form-control" oninput="validatePassword()" />
                     <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('Password', this)">
                         <i class="fa fa-eye"></i>
                     </span>
                 </div>
+                <ul class="validation-list" id="passwordValidation">
+                    <li id="pwLength"><i class="fa fa-times invalid"></i> En az 6 karakter</li>
+                    <li id="pwLower"><i class="fa fa-times invalid"></i> En az 1 küçük harf (a-z)</li>
+                    <li id="pwUpper"><i class="fa fa-times invalid"></i> En az 1 büyük harf (A-Z)</li>
+                    <li id="pwDigit"><i class="fa fa-times invalid"></i> En az 1 rakam (0-9)</li>
+                    <li id="pwSpecial"><i class="fa fa-times invalid"></i> En az 1 özel karakter</li>
+                </ul>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ConfirmPassword"></label>
                 <div class="input-group">
-                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <input asp-for="ConfirmPassword" class="form-control" oninput="validateConfirmPassword()" />
                     <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('ConfirmPassword', this)">
                         <i class="fa fa-eye"></i>
                     </span>
                 </div>
+                <ul class="validation-list" id="confirmPasswordValidation">
+                    <li id="pwMatch"><i class="fa fa-times invalid"></i> Şifreler eşleşiyor</li>
+                </ul>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserType" class="control-label"></label>
-                <select asp-for="UserType" class="form-control">
-                    <option value="Standard">Standard</option>
-                    <option value="Expert">Expert</option>
-                </select>
-                <span asp-validation-for="UserType" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="certificateField" style="display:none;">
-                <label asp-for="Certificate" class="control-label"></label>
-                <input asp-for="Certificate" type="file" class="form-control" />
-                <span asp-validation-for="Certificate" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
@@ -76,13 +105,85 @@
             }
         }
 
-        document.getElementById("UserType").addEventListener("change", function() {
-            var certificateField = document.getElementById("certificateField");
-            if (this.value === "Expert") {
-                certificateField.style.display = "block";
-            } else {
-                certificateField.style.display = "none";
+        function showValidation(validationListId) {
+            var list = document.getElementById(validationListId);
+            if (list) {
+                list.classList.add('show');
             }
-        });
+        }
+
+        function hideValidation(validationListId) {
+            var list = document.getElementById(validationListId);
+            if (list) {
+                list.classList.remove('show');
+            }
+        }
+
+        function setValid(elementId, isValid) {
+            var element = document.getElementById(elementId);
+            var icon = element.querySelector('i');
+            if (isValid) {
+                icon.classList.remove('fa-times', 'invalid');
+                icon.classList.add('fa-check', 'valid');
+                element.classList.remove('invalid');
+                element.classList.add('valid');
+            } else {
+                icon.classList.remove('fa-check', 'valid');
+                icon.classList.add('fa-times', 'invalid');
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+            }
+        }
+
+        function validateEmail() {
+            var email = document.getElementById('Email').value;
+            if (email.length === 0) {
+                hideValidation('emailValidation');
+                return;
+            }
+            showValidation('emailValidation');
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            setValid('emailFormat', emailRegex.test(email));
+        }
+
+        function validateUsername() {
+            var username = document.getElementById('UserName').value;
+            if (username.length === 0) {
+                hideValidation('usernameValidation');
+                return;
+            }
+            showValidation('usernameValidation');
+            setValid('usernameLength', username.length >= 6);
+        }
+
+        function validatePassword() {
+            var password = document.getElementById('Password').value;
+            if (password.length === 0) {
+                hideValidation('passwordValidation');
+                validateConfirmPassword();
+                return;
+            }
+            showValidation('passwordValidation');
+            
+            setValid('pwLength', password.length >= 6);
+            setValid('pwLower', /[a-z]/.test(password));
+            setValid('pwUpper', /[A-Z]/.test(password));
+            setValid('pwDigit', /[0-9]/.test(password));
+            setValid('pwSpecial', /[^a-zA-Z0-9\s]/.test(password));
+            
+            // Also revalidate confirm password
+            validateConfirmPassword();
+        }
+
+        function validateConfirmPassword() {
+            var password = document.getElementById('Password').value;
+            var confirmPassword = document.getElementById('ConfirmPassword').value;
+            if (confirmPassword.length === 0) {
+                hideValidation('confirmPasswordValidation');
+                return;
+            }
+            showValidation('confirmPasswordValidation');
+            setValid('pwMatch', password !== '' && password === confirmPassword);
+        }
     </script>
 }

@@ -4,6 +4,32 @@
     ViewData.AddActivePage(ManageNavPages.Index);
 }
 
+<style>
+    .validation-list {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 10px 0;
+        font-size: 0.85em;
+        display: none;
+    }
+    .validation-list.show {
+        display: block;
+    }
+    .validation-list li {
+        padding: 2px 0;
+    }
+    .validation-list li i {
+        margin-right: 5px;
+        width: 16px;
+    }
+    .valid {
+        color: #28a745;
+    }
+    .invalid {
+        color: #dc3545;
+    }
+</style>
+
 <h4>@ViewData["Title"]</h4>
 @Html.Partial("_StatusMessage", Model.StatusMessage)
 <div class="row">
@@ -19,15 +45,18 @@
                 @if (Model.IsEmailConfirmed)
                 {
                     <div class="input-group">
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" class="form-control" oninput="validateEmail()" />
                         <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                     </div>
                 }
                 else
                 {
-                    <input asp-for="Email" class="form-control" />
+                    <input asp-for="Email" class="form-control" oninput="validateEmail()" />
                     <button asp-action="SendVerificationEmail" class="btn btn-link">Send verification email</button>
                 }
+                <ul class="validation-list" id="emailValidation">
+                    <li id="emailFormat"><i class="fa fa-times invalid"></i> Geçerli email formatı</li>
+                </ul>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -42,4 +71,46 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        function showValidation(validationListId) {
+            var list = document.getElementById(validationListId);
+            if (list) {
+                list.classList.add('show');
+            }
+        }
+
+        function hideValidation(validationListId) {
+            var list = document.getElementById(validationListId);
+            if (list) {
+                list.classList.remove('show');
+            }
+        }
+
+        function setValid(elementId, isValid) {
+            var element = document.getElementById(elementId);
+            var icon = element.querySelector('i');
+            if (isValid) {
+                icon.classList.remove('fa-times', 'invalid');
+                icon.classList.add('fa-check', 'valid');
+                element.classList.remove('invalid');
+                element.classList.add('valid');
+            } else {
+                icon.classList.remove('fa-check', 'valid');
+                icon.classList.add('fa-times', 'invalid');
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+            }
+        }
+
+        function validateEmail() {
+            var email = document.getElementById('Email').value;
+            if (email.length === 0) {
+                hideValidation('emailValidation');
+                return;
+            }
+            showValidation('emailValidation');
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            setValid('emailFormat', emailRegex.test(email));
+        }
+    </script>
 }

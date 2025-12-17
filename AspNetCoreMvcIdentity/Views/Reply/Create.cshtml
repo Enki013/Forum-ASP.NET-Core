@@ -8,13 +8,9 @@
 <div>
     <img href="@Model.ForumImageUrl" />
     <a asp-controller="Post" asp-action="Index" asp-route-id="@Model.PostId" class="btn btn-warning">Go back to post</a>
-
-
-
     <br />
     <br />
-
-    <div class="card">
+<div class="card">
         <div class="card-header">
             Original comment:
         </div>
@@ -25,17 +21,14 @@
                 <br />
                 <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
                 @if (Model.IsAuthorAdmin)
-
-
-
                 {
                     <br />
                     <p class="badge badge-dark" style="width: 60px;">Admin</p>
                 }
-                @if (Model.UserType == "Expert")
+                @if (Model.UserType == "Mod")
                 {
                     <br />
-                    <p class="badge badge-dark" style="width: 60px;">Expert</p>
+                    <p class="badge badge-dark" style="width: 60px;">Mod</p>
                 }
                 <br />
                 Points: (@Model.AuthorRating)
@@ -43,9 +36,6 @@
             </div>
             <div class="col-10">
                 @if (Model.QuotedReplyId.HasValue)
-
-
-
                 {
                     <blockquote class="blockquote">
                         <p class="mb-0">şu yorumdan alıntı: @Html.Raw(Model.QuotedReplyContent)</p>
@@ -64,8 +54,6 @@
             Posted on: @Model.Created
         </div>
     </div>
-
-
 </div>
 
 <br />

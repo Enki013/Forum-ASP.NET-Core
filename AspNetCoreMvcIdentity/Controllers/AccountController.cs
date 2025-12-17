@@ -229,18 +229,10 @@ namespace AspNetCoreMvcIdentity.Controllers
                     UserName = model.UserName, 
                     Email = model.Email, 
                     MemberSince = DateTime.Now, 
-                    UserType = model.UserType, 
+                    UserType = "User", 
                     IsActive = true
                     // ProfileImageUrl will be null by default
                 };
-                if (model.UserType == "Expert" && model.Certificate != null)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await model.Certificate.CopyToAsync(memoryStream);
-                        user.Certificate = memoryStream.ToArray(); // Sertifikayı byte dizisi olarak kaydedin
-                    }
-                }
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

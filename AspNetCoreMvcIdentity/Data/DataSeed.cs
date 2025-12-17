@@ -34,8 +34,7 @@ namespace AspNetCoreMvcIdentity.Data
                 ProfileImageUrl = "/images/users/admin.png",
                 MemberSince = DateTime.Now,
                 IsActive = true,
-                UserType = "Admin",
-                Certificate = Array.Empty<byte>()
+                UserType = "Admin"
             };
 
             var hasher = new PasswordHasher<ApplicationUser>();
@@ -109,7 +108,7 @@ namespace AspNetCoreMvcIdentity.Data
         {
             var roleStore = new RoleStore<ApplicationRole, ApplicationDbContext, long>(_context);
 
-            var roles = new[] { "Admin", "Standard", "Expert" };
+            var roles = new[] { "Admin", "Mod", "User" };
             foreach (var role in roles)
             {
                 if (!_context.Roles.Any(r => r.Name == role))

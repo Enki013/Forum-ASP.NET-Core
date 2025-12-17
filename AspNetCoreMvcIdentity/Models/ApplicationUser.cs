@@ -11,8 +11,7 @@ namespace AspNetCoreMvcIdentity.Models
 // ProfileImageUrl: Profil resmi yolu
 // MemberSince: Üyelik tarihi
 // IsActive: Kullanıcı aktiflik durumu
-// UserType: Kullanıcı tipi (Standard/Expert)
-// Certificate: Uzman kullanıcılar için sertifika
+// UserType: Kullanıcı tipi (Admin/Mod/User)
 
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser<long>
@@ -23,7 +22,6 @@ namespace AspNetCoreMvcIdentity.Models
         public bool IsActive { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<PostReply> Replies { get; set; }
-        public byte[]? Certificate { get; set; } // Sertifika dosyası
-        public string? UserType { get; set; } // "Standard" or "Expert"
+        public string? UserType { get; set; } // "Admin", "Mod", or "User"
     }
 }

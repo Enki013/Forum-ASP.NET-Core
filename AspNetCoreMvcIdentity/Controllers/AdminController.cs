@@ -52,7 +52,7 @@ public class AdminController : Controller
         var user = _userService.GetById(userId);
         if (user != null)
         {
-            var roles = new[] { "Admin", "Standard", "Expert" };
+            var roles = new[] { "Admin", "Mod", "User" };
             foreach (var r in roles)
             {
                 if (await _userManager.IsInRoleAsync(user, r))
