@@ -65,7 +65,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // Add application services.
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-builder.Services.AddControllersWithViews(options => options.EnableEndpointRouting = false)
+builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 builder.Services.AddScoped<IForum, ForumService>();
 builder.Services.AddScoped<IPost, PostService>();
@@ -101,13 +101,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 
+app.UseRouting();
 app.UseAuthentication();
-app.UseMvc(routes =>
-{
-    routes.MapRoute(
-        name: "admin",
-        template: "{controller=Admin}/{action=Index}/{id?}");
-});
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Admin}/{action=Index}/{id?}");
 
 app.Run();
 

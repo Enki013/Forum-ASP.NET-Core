@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AspNetCoreMvcIdentity
 {
@@ -81,7 +82,7 @@ namespace AspNetCoreMvcIdentity
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataSeed dataSeed)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeed dataSeed)
         {
             if (env.IsDevelopment())
             {

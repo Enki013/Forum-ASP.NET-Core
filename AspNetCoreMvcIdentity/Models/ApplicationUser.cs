@@ -23,7 +23,7 @@ namespace AspNetCoreMvcIdentity.Models
         public bool IsActive { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<PostReply> Replies { get; set; }
-        public byte[] Certificate { get; set; } // Sertifika dosyası
-        public string UserType { get; set; } // "Standard" or "Expert"
+        public byte[]? Certificate { get; set; } // Sertifika dosyası
+        public string? UserType { get; set; } // "Standard" or "Expert"
     }
 }

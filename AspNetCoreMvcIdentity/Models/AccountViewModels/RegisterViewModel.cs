@@ -38,6 +38,6 @@ namespace AspNetCoreMvcIdentity.Models.AccountViewModels
 
         [RequiredIf("UserType", "Expert", ErrorMessage = "Certificate is required for experts.")]
         [Display(Name = "Certificate")]
-        public IFormFile Certificate { get; set; } // Certificate file
+        public IFormFile? Certificate { get; set; } // Certificate file
     }
 }

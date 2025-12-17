@@ -29,9 +29,33 @@ namespace AspNetCoreMvcIdentity.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+            
+            // Cascade delete sorununu çözmek için ilişkileri yapılandır
+            builder.Entity<Post>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Post>()
+                .HasOne(p => p.Forum)
+                .WithMany(f => f.Posts)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostReply>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<PostReply>()
+                .HasOne(r => r.Post)
+                .WithMany(p => p.Replies)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+            builder.Entity<PostReply>()
+                .HasOne(r => r.ParentReply)
+                .WithMany(r => r.Replies)
+                .HasForeignKey(r => r.ParentReplyId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

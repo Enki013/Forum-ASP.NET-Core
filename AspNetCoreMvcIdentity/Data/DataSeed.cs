@@ -34,7 +34,8 @@ namespace AspNetCoreMvcIdentity.Data
                 ProfileImageUrl = "/images/users/admin.png",
                 MemberSince = DateTime.Now,
                 IsActive = true,
-                UserType = "Admin"
+                UserType = "Admin",
+                Certificate = Array.Empty<byte>()
             };
 
             var hasher = new PasswordHasher<ApplicationUser>();
