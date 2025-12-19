@@ -76,6 +76,7 @@ builder.Services.AddScoped<IApplicationUser, ApplicationUserService>();
 
 // Clean Architecture / CQRS Infrastructure
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 

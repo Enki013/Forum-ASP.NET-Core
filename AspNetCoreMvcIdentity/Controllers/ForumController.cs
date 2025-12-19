@@ -17,11 +17,13 @@ namespace AspNetCoreMvcIdentity.Controllers
     {
         private readonly IForum _forum;
         private readonly IPost _post;
+        private readonly MediatR.IMediator _mediator;
 
-        public ForumController(IForum forum, IPost post)
+        public ForumController(IForum forum, IPost post, MediatR.IMediator mediator)
         {
             _forum = forum;
             _post = post;
+            _mediator = mediator;
         }
 
         public IActionResult Index()
@@ -116,48 +118,16 @@ namespace AspNetCoreMvcIdentity.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddForum(AddForumModel model)
         {
-            var imageUri = "/images/forum/forum.png"; // Default image path
-
-            if (model.ImageUpload != null && model.ImageUpload.Length > 0)
-            {
-                // Generate a unique filename
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageUpload.FileName);
-                
-                // Set the path where images will be saved
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/forum", fileName);
-                
-                // Create directory if it doesn't exist
-                var directory = Path.GetDirectoryName(imagePath);
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-
-                // Save the file
-                using (var fileStream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await model.ImageUpload.CopyToAsync(fileStream);
-                }
-
-                // Set the image URL for the forum
-                imageUri = $"/images/forum/{fileName}";
-            }
-
-            var forum = new Forum
+            var command = new AspNetCoreMvcIdentity.Application.Forums.Commands.CreateForum.CreateForumCommand
             {
                 Title = model.Title,
                 Description = model.Description,
-                Created = DateTime.Now,
-                ImageUrl = imageUri
+                ImageUpload = model.ImageUpload
             };
 
-            await _forum.Create(forum);
+            await _mediator.Send(command);
+            
             return RedirectToAction("Index", "Forum");
-        }
-
-        private object UploadForumImage(IFormFile imageUpload)
-        {
-            throw new NotImplementedException();
         }
 
         private ForumListingModel BuildForumListing(Post post)
