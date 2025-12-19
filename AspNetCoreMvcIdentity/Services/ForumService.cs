@@ -42,7 +42,11 @@ namespace AspNetCoreMvcIdentity.Services
         public IEnumerable<Forum> GetAll()
         {
             return _context.Forums
-                .Include(f => f.Posts);
+                .Include(f => f.Posts)
+                    .ThenInclude(p => p.User)
+                .Include(f => f.Posts)
+                    .ThenInclude(p => p.Replies)
+                        .ThenInclude(r => r.User);
         }
 
    
