@@ -13,14 +13,6 @@
         <div class="sectionHeading noBorder">
 
         </div>
-        @*@if (User.IsInRole("Admin"))
-        {
-        <form method="post" asp-controller="Profile" asp-action="Deactivate" asp-route-id="@Model.UserId">
-        <div>
-        <button class="btn btn-danger" active="@Model.IsActive">Deactivate User</button>
-        </div>
-        </form>
-        }*@
     </div>
 
     @if (Context.User.Identity!.IsAuthenticated)

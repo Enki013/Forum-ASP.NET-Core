@@ -13,8 +13,7 @@ namespace AspNetCoreMvcIdentity.Services
 
         Task Create(Forum forum);
         Task Delete(int forumId);
-        Task UpdateForumTitle(int forumId, string newTitle);
-        Task UpdateForumDescription(int forumId, string newDescription);
+
         bool HasRecentPost(int id);
         IEnumerable<ApplicationUser> GetAllActiveUsers(int id);
     }

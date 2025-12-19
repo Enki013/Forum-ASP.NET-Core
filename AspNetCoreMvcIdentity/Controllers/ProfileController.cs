@@ -50,11 +50,6 @@ namespace AspNetCoreMvcIdentity.Controllers
             };
             return View(model);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> UploadProfileImage(IFormFile file)
-        //{
-        //    var userId = _userManager.GetUserId(User);
-        //}
 
 
         [Authorize(Roles = "Admin")]

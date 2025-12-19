@@ -84,15 +84,5 @@ namespace AspNetCoreMvcIdentity.Services
             }
             return forum.Posts.Any(p => p.Created > window);
         }
-
-        public Task UpdateForumDescription(int forumId, string newDescription)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateForumTitle(int forumId, string newTitle)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

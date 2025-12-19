@@ -39,11 +39,6 @@ namespace AspNetCoreMvcIdentity.Services
             }
         }
 
-        public Task EditPostContent(int id, string newContent)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Post> GetAll()
         {
             return _context.Posts
