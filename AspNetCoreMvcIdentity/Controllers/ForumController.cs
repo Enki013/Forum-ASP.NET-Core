@@ -32,33 +32,12 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         public IActionResult Index()
         {
-            const int hoursAgo = 24;
-            var recentWindow = DateTime.Now.AddHours(-hoursAgo);
-            
-            // GetAll() now includes eager loading for Posts, Users, and Replies
-            // All calculations are done in-memory to avoid N+1 queries
-            var forums = _forum.GetAll().ToList().Select(f => 
-            {
-                var posts = f.Posts ?? new List<Post>();
-                var postUsers = posts.Select(p => p.User);
-                var replyUsers = posts.SelectMany(p => p.Replies ?? new List<PostReply>()).Select(r => r.User);
-                var activeUsers = postUsers.Union(replyUsers).Distinct();
-                
-                return new ForumListingModel
-                {
-                    Id = f.Id,
-                    Title = f.Title,
-                    Description = f.Description,
-                    NumberOfPosts = posts.Count(),
-                    NumberOfUsers = activeUsers.Count(),
-                    ForumImageUrl = f.ImageUrl,
-                    HasRecentPost = posts.Any(p => p.Created > recentWindow)
-                };
-            });
+            var forums = _forum.GetAll().ToList();
+            var forumModels = _mapper.Map<IEnumerable<ForumListingModel>>(forums);
 
             var model = new ForumIndexModel
             {
-                ForumList = forums.OrderBy(f => f.Title)
+                ForumList = forumModels.OrderBy(f => f.Title)
             };
 
             return View(model);

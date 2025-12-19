@@ -23,7 +23,19 @@ namespace AspNetCoreMvcIdentity.Application.Common.Mappings
                 
             // Forum -> ForumListingModel
             CreateMap<Forum, ForumListingModel>()
-                .ForMember(dest => dest.ForumImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+                .ForMember(dest => dest.ForumImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+                .ForMember(dest => dest.NumberOfPosts, opt => opt.MapFrom(src => src.Posts == null ? 0 : src.Posts.Count()))
+                .ForMember(dest => dest.NumberOfUsers, opt => opt.MapFrom(src => 
+                    (src.Posts ?? new List<Post>())
+                        .Select(p => p.User)
+                        .Union((src.Posts ?? new List<Post>())
+                            .SelectMany(p => p.Replies ?? new List<PostReply>())
+                            .Select(r => r.User))
+                        .Distinct()
+                        .Count()))
+                .ForMember(dest => dest.HasRecentPost, opt => opt.MapFrom(src => 
+                    (src.Posts ?? new List<Post>())
+                        .Any(p => p.Created > DateTime.Now.AddHours(-24))));
                 
             // Post -> PostListingModel
             CreateMap<Post, PostListingModel>()
