@@ -10,6 +10,7 @@ using AspNetCoreMvcIdentity.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace AspNetCoreMvcIdentity.Controllers
 {
@@ -18,12 +19,14 @@ namespace AspNetCoreMvcIdentity.Controllers
         private readonly IForum _forum;
         private readonly IPost _post;
         private readonly MediatR.IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public ForumController(IForum forum, IPost post, MediatR.IMediator mediator)
+        public ForumController(IForum forum, IPost post, MediatR.IMediator mediator, IMapper mapper)
         {
             _forum = forum;
             _post = post;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -52,7 +55,7 @@ namespace AspNetCoreMvcIdentity.Controllers
         public IActionResult Delete(int id)
         {
             var forum = _forum.GetById(id);
-            var model = BuildForumListing(forum);
+            var model = _mapper.Map<ForumListingModel>(forum);
             return View(model);
         }
 
@@ -69,30 +72,20 @@ namespace AspNetCoreMvcIdentity.Controllers
             var posts = new List<Post>();
             var forum = _forum.GetById(id);
         
-                 posts = _post.GetFilteredPosts(forum, searchQuery).ToList();
+            posts = _post.GetFilteredPosts(forum, searchQuery).ToList();
        
-            var postListings = posts.Select(p => new PostListingModel
-            {
-                Id = p.Id,
-                AuthorId = p.User.Id.ToString(),
-                AuthorRating = p.User.Rating,
-                Title = p.Title,
-                DatePosted = p.Created.ToString(),
-                RepliesCount = p.Replies.Count(),
-                AuthorName = p.User.UserName,
-                Forum = BuildForumListing(p)
-
-
+            var postListings = posts.Select(p => {
+                var listing = _mapper.Map<PostListingModel>(p);
+                listing.Forum = _mapper.Map<ForumListingModel>(p.Forum);
+                return listing;
             });
 
             var model = new ForumDetailsModel
             {
                 Posts = postListings,
-                Forum = BuildForumListing(forum),
+                Forum = _mapper.Map<ForumListingModel>(forum),
                 SearchQuery = searchQuery
             };
-
-
 
             return View(model);
         }
@@ -134,23 +127,5 @@ namespace AspNetCoreMvcIdentity.Controllers
             
             return RedirectToAction("Index", "Forum");
         }
-
-        private ForumListingModel BuildForumListing(Post post)
-        {
-            var forum = post.Forum;
-            return BuildForumListing(forum);
-        }
-        private ForumListingModel BuildForumListing(Forum forum)
-        {
-
-            return new ForumListingModel
-            {
-                Id = forum.Id,
-                Title = forum.Title,
-                Description = forum.Description,
-                ForumImageUrl = forum.ImageUrl
-            };
-        }
-
     }
 }

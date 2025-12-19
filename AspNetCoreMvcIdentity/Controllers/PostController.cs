@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using AutoMapper;
 using AspNetCoreMvcIdentity.Application.Posts.Commands.CreatePost;
 
 namespace AspNetCoreMvcIdentity.Controllers
@@ -20,13 +21,15 @@ namespace AspNetCoreMvcIdentity.Controllers
         private readonly IPost _post;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public PostController(IPost post, IForum forum, UserManager<ApplicationUser> userManager, IMediator mediator)
+        public PostController(IPost post, IForum forum, UserManager<ApplicationUser> userManager, IMediator mediator, IMapper mapper)
         {
             _post = post;
             _forum = forum;
             _userManager = userManager;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> IndexAsync(int id)
@@ -41,7 +44,15 @@ namespace AspNetCoreMvcIdentity.Controllers
             post.Views += 1;
             await _post.Update(post);
 
-            var replies = BuildPostReplies(post.Replies);
+            // Use AutoMapper for reply mapping
+            var replies = _mapper.Map<IEnumerable<PostReplyModel>>(post.Replies);
+            
+            // Set IsAuthorAdmin for each reply (requires async check)
+            foreach (var reply in replies)
+            {
+                var replyEntity = post.Replies.First(r => r.Id == reply.Id);
+                reply.IsAuthorAdmin = await IsAuthorAdmin(replyEntity.User);
+            }
             
             var model = new PostIndexModel
             {
@@ -66,24 +77,6 @@ namespace AspNetCoreMvcIdentity.Controllers
         private async Task<bool> IsAuthorAdmin(ApplicationUser user)
         {
             return (await _userManager.GetRolesAsync(user)).Contains("Admin");
-        }
-
-        private IEnumerable<PostReplyModel> BuildPostReplies(IEnumerable<PostReply> replies)
-        {
-            return replies.Select(r => new PostReplyModel
-            {
-                Id = r.Id,
-                AuthorName = r.User.UserName,
-                AuthorId = r.User.Id.ToString(),
-                AuthorImageUrl = r.User.GetProfileImageUrl(),
-                AuthorRating = r.User.Rating,
-                Created = r.Created,
-                ReplyContent = r.Content,
-                IsAuthorAdmin = IsAuthorAdmin(r.User).Result,
-                QuotedReplyContent = r.QuotedReplyContent,
-                QuotedReplyId = r.QuotedReplyId,
-                UserType = r.User.UserType 
-            });
         }
         
         [Authorize]
@@ -118,9 +111,9 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _post.Delete(id).Wait();
+            await _post.Delete(id);
             return RedirectToAction("Index", "Home");
         }
 
