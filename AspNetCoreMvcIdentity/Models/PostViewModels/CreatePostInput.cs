@@ -11,10 +11,10 @@ namespace AspNetCoreMvcIdentity.Models.PostViewModels
         
         [Required(ErrorMessage = "Title is required")]
         [MinLength(3, ErrorMessage = "Title must be at least 3 characters")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "Content is required")]
         [MinLength(1, ErrorMessage = "Content cannot be empty")]
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
     }
 }

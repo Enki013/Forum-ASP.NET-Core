@@ -11,7 +11,7 @@ namespace AspNetCoreMvcIdentity.Models.ReplyViewModels
         
         [Required(ErrorMessage = "Reply content is required")]
         [MinLength(1, ErrorMessage = "Reply content cannot be empty")]
-        public string ReplyContent { get; set; }
+        public string ReplyContent { get; set; } = string.Empty;
         
         public int? ParentReplyId { get; set; }
         public int? QuotedReplyId { get; set; }
