@@ -38,6 +38,10 @@ namespace AspNetCoreMvcIdentity.Services
         {
             var longid = Convert.ToInt64(id);
             var user = GetById(longid);
+            if (user == null)
+            {
+                return;
+            }
             user.Rating = CalculateUserRating(type, user.Rating);
             await _context.SaveChangesAsync();
         }
@@ -56,6 +60,10 @@ namespace AspNetCoreMvcIdentity.Services
         public async Task SetProfileImage(long id, Uri uri)
         {
             var user = GetById(id);
+            if (user == null)
+            {
+                return;
+            }
             user.ProfileImageUrl = uri?.AbsoluteUri ?? "/images/users/default.png"; // Default resim ekleyin
             _context.Update(user);
             await _context.SaveChangesAsync();

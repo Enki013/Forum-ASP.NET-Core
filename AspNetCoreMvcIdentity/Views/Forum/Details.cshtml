@@ -9,7 +9,7 @@
 
 <h1>Welcome to @Model.Forum.Title forum</h1>
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity!.IsAuthenticated)
 {
     <div class="row">
         <h3><a class="btn btn-primary" asp-controller="Post" asp-action="Create" asp-route-id="@Model.Forum.Id"> New Post</a></h3>
@@ -59,18 +59,7 @@ else
                     <div>Posted on: @post.DatePosted</div>
 
 
-                    @if (post.RepliesCount == 0)
-                    {
-                        <div>No replies</div>
-                    }
-                    @if (post.RepliesCount == 1)
-                    {
-                        <div>1 reply</div>
-                    }
-                    @if (post.RepliesCount > 1)
-                    {
-                        <div>@post.RepliesCount replies</div>
-                    }
+                    <div>@(post.RepliesCount == 0 ? "No replies" : post.RepliesCount == 1 ? "1 reply" : $"{post.RepliesCount} replies")</div>
 
 
 

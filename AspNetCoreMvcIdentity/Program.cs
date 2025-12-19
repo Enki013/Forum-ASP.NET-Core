@@ -127,6 +127,10 @@ public static class DatabaseManagementService
         using (var serviceScope = app.ApplicationServices.CreateScope())
         {
             var serviceDb = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            if (serviceDb == null)
+            {
+                throw new InvalidOperationException("ApplicationDbContext not configured");
+            }
             
             // Veritabanı bağlantısını bekle
             WaitForDatabase(serviceDb);

@@ -58,7 +58,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             var posts = latestPosts.Select(p => new PostListingModel{
                 Id = p.Id,
                 Title = p.Title,
-                AuthorName = p.User.UserName,
+                AuthorName = p.User.UserName ?? string.Empty,
                 AuthorId = p.User.Id.ToString(),
                 AuthorRating = p.User.Rating,
                 DatePosted = p.Created.ToString(),
@@ -69,7 +69,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             var postsPopular = popularPosts.Select(p => new PostListingModel{
                 Id = p.Id,
                 Title = p.Title,
-                AuthorName = p.User.UserName,
+                AuthorName = p.User.UserName ?? string.Empty,
                 AuthorId = p.User.Id.ToString(),
                 AuthorRating = p.User.Rating,
                 DatePosted = p.Created.ToString(),
@@ -90,12 +90,12 @@ namespace AspNetCoreMvcIdentity.Controllers
             
         }
 
-        private ForumListingModel GetForumListingForPost(Post p)
+        private ForumListingModel? GetForumListingForPost(Post p)
         {
             var forum = p.Forum;
             if (forum == null)
             {
-                return null; // or return a suitable default value
+                return null;
             }
             return new ForumListingModel
             {

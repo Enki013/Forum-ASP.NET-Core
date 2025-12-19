@@ -100,22 +100,7 @@
                                 <div>by <a class="text-dark" asp-controller="Profile" asp-action="Details"
                                         asp-route-id="@post.AuthorId">@post.AuthorName</a></div>
                                 <div class="text-muted">
-                                    @if (post.RepliesCount == 1)
-
-                                    {
-                                        <span>@post.RepliesCount Reply</span>
-                                    }
-                                    @if (post.RepliesCount == 0)
-
-                                    {
-                                        <span>No replies</span>
-                                    }
-                                    @if (post.RepliesCount > 1)
-
-                                    {
-                                        <span>@post.RepliesCount Replies</span>
-
-                                    }
+                                    <span>@(post.RepliesCount == 0 ? "No replies" : post.RepliesCount == 1 ? "1 Reply" : $"{post.RepliesCount} Replies")</span>
                                 </div>
 
 
@@ -152,22 +137,7 @@
                                         asp-route-id="@post.AuthorId">@post.AuthorName</a></div>
                                 <div class="text-muted">
 
-                                    @if (post.RepliesCount == 1)
-
-                                    {
-                                        <span>@post.RepliesCount Reply</span>
-                                    }
-                                    @if (post.RepliesCount == 0)
-
-                                    {
-                                        <span>No replies</span>
-                                    }
-                                    @if (post.RepliesCount > 1)
-
-                                    {
-                                        <span>@post.RepliesCount Replies</span>
-
-                                    }
+                                    <span>@(post.RepliesCount == 0 ? "No replies" : post.RepliesCount == 1 ? "1 Reply" : $"{post.RepliesCount} Replies")</span>
 
                                 </div>
                             </td>

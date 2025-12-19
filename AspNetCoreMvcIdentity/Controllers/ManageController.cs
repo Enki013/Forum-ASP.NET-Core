@@ -59,7 +59,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             var model = new IndexViewModel
             {
                 Username = user.UserName,
-                Email = user.Email,
+                Email = user.Email ?? string.Empty,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage,
@@ -137,7 +137,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
             var email = user.Email;
-            await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+            await _emailSender.SendEmailConfirmationAsync(email ?? string.Empty, callbackUrl ?? string.Empty);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToAction(nameof(Index));
@@ -177,7 +177,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword ?? string.Empty, model.NewPassword ?? string.Empty);
             if (!changePasswordResult.Succeeded)
             {
                 AddErrors(changePasswordResult);
@@ -226,7 +226,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+            var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword ?? string.Empty);
             if (!addPasswordResult.Succeeded)
             {
                 AddErrors(addPasswordResult);
@@ -423,7 +423,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
             var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-            TempData[RecoveryCodesKey] = recoveryCodes.ToArray();
+            TempData[RecoveryCodesKey] = recoveryCodes?.ToArray() ?? Array.Empty<string>();
 
             return RedirectToAction(nameof(ShowRecoveryCodes));
         }
@@ -431,7 +431,7 @@ namespace AspNetCoreMvcIdentity.Controllers
         [HttpGet]
         public IActionResult ShowRecoveryCodes()
         {
-            var recoveryCodes = (string[])TempData[RecoveryCodesKey];
+            var recoveryCodes = TempData[RecoveryCodesKey] as string[];
             if (recoveryCodes == null)
             {
                 return RedirectToAction(nameof(TwoFactorAuthentication));
@@ -499,7 +499,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
             _logger.LogInformation("User with ID {UserId} has generated new 2FA recovery codes.", user.Id);
 
-            var model = new ShowRecoveryCodesViewModel { RecoveryCodes = recoveryCodes.ToArray() };
+            var model = new ShowRecoveryCodesViewModel { RecoveryCodes = recoveryCodes?.ToArray() ?? Array.Empty<string>() };
 
             return View(nameof(ShowRecoveryCodes), model);
         }
@@ -549,8 +549,8 @@ namespace AspNetCoreMvcIdentity.Controllers
                 unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             }
 
-            model.SharedKey = FormatKey(unformattedKey);
-            model.AuthenticatorUri = GenerateQrCodeUri(user.Email, unformattedKey);
+            model.SharedKey = FormatKey(unformattedKey ?? string.Empty);
+            model.AuthenticatorUri = GenerateQrCodeUri(user.Email ?? string.Empty, unformattedKey ?? string.Empty);
         }
 
         #endregion

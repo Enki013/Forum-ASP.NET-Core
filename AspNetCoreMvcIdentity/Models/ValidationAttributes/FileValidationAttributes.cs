@@ -14,7 +14,7 @@ namespace AspNetCoreMvcIdentity.Models.ValidationAttributes
             _extensions = extensions;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value is IFormFile file)
             {
@@ -37,7 +37,7 @@ namespace AspNetCoreMvcIdentity.Models.ValidationAttributes
             _maxFileSize = maxFileSize;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value is IFormFile file)
             {
@@ -49,4 +49,4 @@ namespace AspNetCoreMvcIdentity.Models.ValidationAttributes
             return ValidationResult.Success;
         }
     }
-} 
+}

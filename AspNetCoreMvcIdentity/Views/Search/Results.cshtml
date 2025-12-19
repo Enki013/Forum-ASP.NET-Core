@@ -35,18 +35,7 @@
                             <div>Posted on: @post.DatePosted</div>
 
 
-                            @if (post.RepliesCount == 0)
-                            {
-                                <div>No replies</div>
-                            }
-                            @if (post.RepliesCount == 1)
-                            {
-                                <div>1 reply</div>
-                            }
-                            @if (post.RepliesCount > 1)
-                            {
-                                <div>@post.RepliesCount replies</div>
-                            }
+                            <div>@(post.RepliesCount == 0 ? "No replies" : post.RepliesCount == 1 ? "1 reply" : $"{post.RepliesCount} replies")</div>
 
 
 

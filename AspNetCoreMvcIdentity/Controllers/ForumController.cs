@@ -71,6 +71,10 @@ namespace AspNetCoreMvcIdentity.Controllers
         {
             var posts = new List<Post>();
             var forum = _forum.GetById(id);
+            if (forum == null)
+            {
+                return NotFound();
+            }
         
             posts = _post.GetFilteredPosts(forum, searchQuery).ToList();
        

@@ -43,7 +43,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 PostTitle = post.Title,
                 PostContent = post.Content,
                 AuthorId = postAuthor.Id.ToString(),
-                AuthorName = postAuthor.UserName,
+                AuthorName = postAuthor.UserName ?? string.Empty,
                 AuthorImageUrl = postAuthor.GetProfileImageUrl(),
                 AuthorRating = postAuthor.Rating,
                 IsAuthorAdmin = await _userManager.IsInRoleAsync(postAuthor, "Admin"),
@@ -84,7 +84,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                     PostTitle = post.Title,
                     PostContent = post.Content,
                     AuthorId = postAuthor.Id.ToString(),
-                    AuthorName = postAuthor.UserName,
+                    AuthorName = postAuthor.UserName ?? string.Empty,
                     AuthorImageUrl = postAuthor.GetProfileImageUrl(),
                     AuthorRating = postAuthor.Rating,
                     IsAuthorAdmin = await _userManager.IsInRoleAsync(postAuthor, "Admin"),
@@ -105,7 +105,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             {
                 PostId = input.PostId,
                 Content = input.ReplyContent,
-                AuthorId = userId,
+                AuthorId = userId ?? string.Empty,
                 ParentReplyId = input.ParentReplyId,
                 QuotedReplyId = input.QuotedReplyId
             };

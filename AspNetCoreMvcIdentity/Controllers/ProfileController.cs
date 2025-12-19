@@ -29,6 +29,11 @@ namespace AspNetCoreMvcIdentity.Controllers
         public IActionResult Details(long id)
         {
             var user = _user.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
             var userRoles = _userManager.GetRolesAsync(user).Result;
             var isAdmin = userRoles.Contains("Admin");
             var model = new ProfileModel()

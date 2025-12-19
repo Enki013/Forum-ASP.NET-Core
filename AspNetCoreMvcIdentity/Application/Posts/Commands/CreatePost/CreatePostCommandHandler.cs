@@ -34,7 +34,16 @@ namespace AspNetCoreMvcIdentity.Application.Posts.Commands.CreatePost
         public async Task<int> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+            {
+                throw new Exception($"User with id {request.UserId} not found");
+            }
+
             var forum = _forumService.GetById(request.ForumId);
+            if (forum == null)
+            {
+                throw new Exception($"Forum with id {request.ForumId} not found");
+            }
 
             var post = new Post
             {

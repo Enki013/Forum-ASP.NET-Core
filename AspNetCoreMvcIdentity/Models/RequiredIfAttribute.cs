@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 public class RequiredIfAttribute : ValidationAttribute
 {
@@ -13,7 +12,7 @@ public class RequiredIfAttribute : ValidationAttribute
         _desiredValue = desiredValue;
     }
 
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         var property = validationContext.ObjectType.GetProperty(_propertyName);
         if (property == null)

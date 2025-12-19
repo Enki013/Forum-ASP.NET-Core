@@ -96,7 +96,7 @@ namespace AspNetCoreMvcIdentity.Data
                     Content = "Forumumuza hoş geldiniz! Burada genel konular hakkında tartışabilirsiniz.",
                     Created = DateTime.Now,
                     Forum = forum,
-                    User = _context.Users.FirstOrDefault(u => u.UserName == "Admin")
+                    User = _context.Users.FirstOrDefault(u => u.UserName == "Admin")!
                 };
 
                 _context.Posts.Add(post);

@@ -59,7 +59,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 Id = post.Id,
                 Title = post.Title,
                 AuthorId = post.User.Id.ToString(),
-                AuthorName = post.User.UserName,
+                AuthorName = post.User.UserName ?? string.Empty,
                 AuthorRating = post.User.Rating,
                 Created = post.Created,
                 PostContent = post.Content,
@@ -83,13 +83,17 @@ namespace AspNetCoreMvcIdentity.Controllers
         public IActionResult Create(int id)
         {
             var forum = _forum.GetById(id);
+            if (forum == null)
+            {
+                return NotFound();
+            }
 
             var model = new NewPostModel
             {
                 ForumName = forum.Title,
                 ForumId = forum.Id,
                 ForumImageUrl = forum.ImageUrl,
-                AuthorName = User.Identity.Name
+                AuthorName = User.Identity?.Name ?? string.Empty
             };
 
             return View(model);
@@ -99,6 +103,11 @@ namespace AspNetCoreMvcIdentity.Controllers
         public IActionResult Delete(int id)
         {
             var post = _post.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            
             var model = new PostListingModel
             {
                 Id = post.Id,
@@ -128,9 +137,9 @@ namespace AspNetCoreMvcIdentity.Controllers
                 var model = new NewPostModel
                 {
                     ForumId = input.ForumId,
-                    ForumName = forum?.Title,
-                    ForumImageUrl = forum?.ImageUrl,
-                    AuthorName = User.Identity?.Name,
+                    ForumName = forum?.Title ?? string.Empty,
+                    ForumImageUrl = forum?.ImageUrl ?? string.Empty,
+                    AuthorName = User.Identity?.Name ?? string.Empty,
                     Title = input.Title,
                     Content = input.Content
                 };
@@ -144,7 +153,7 @@ namespace AspNetCoreMvcIdentity.Controllers
                 Title = input.Title,
                 Content = input.Content,
                 ForumId = input.ForumId,
-                UserId = userId
+                UserId = userId ?? string.Empty
             };
 
             var id = await _mediator.Send(command);

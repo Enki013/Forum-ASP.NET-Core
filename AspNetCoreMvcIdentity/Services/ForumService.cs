@@ -77,7 +77,12 @@ namespace AspNetCoreMvcIdentity.Services
         {
             const int hoursAgo = 24;
             var window = DateTime.Now.AddHours(-hoursAgo);
-            return GetById(id).Posts.Any(p => p.Created > window);
+            var forum = GetById(id);
+            if (forum == null)
+            {
+                return false;
+            }
+            return forum.Posts.Any(p => p.Created > window);
         }
 
         public Task UpdateForumDescription(int forumId, string newDescription)

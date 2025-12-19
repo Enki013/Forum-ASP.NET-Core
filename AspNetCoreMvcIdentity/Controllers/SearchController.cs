@@ -39,7 +39,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             {
                 Id = p.Id,
                 AuthorId = p.User.Id.ToString(),
-                AuthorName = p.User.UserName,
+                AuthorName = p.User.UserName ?? string.Empty,
                 AuthorRating = p.User.Rating,
 
                 Title = p.Title,

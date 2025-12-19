@@ -42,7 +42,7 @@ namespace AspNetCoreMvcIdentity.Application.Replies.Commands.CreateReply
                 throw new Exception($"User with id {request.AuthorId} not found"); 
             }
 
-            PostReply quotedReply = null;
+            PostReply? quotedReply = null;
             string quotedContent = string.Empty;
             string quotedTitle = string.Empty;
             

@@ -72,7 +72,7 @@ else
 
 <br />
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity!.IsAuthenticated)
 {
     <div class="row">
         <span><a class="btn btn-dark" asp-controller="Reply" asp-action="Create" asp-route-id="@Model.Id">Add a Reply</a></span>
