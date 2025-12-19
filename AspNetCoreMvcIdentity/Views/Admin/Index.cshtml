@@ -75,7 +75,7 @@
                                 </form>
                             </td>
                             <td>
-                                <form asp-action="UpdateUserStatus" method="post" class="mt-2">
+                                <form asp-action="UpdateUserStatusAsync" method="post" class="mt-2">
                                     <input type="hidden" name="userId" value="@user.Id" />
                                     <input type="hidden" name="isActive" value="@(user.IsActive ? "false" : "true")" />
                                     <button type="submit" class="btn btn-secondary">

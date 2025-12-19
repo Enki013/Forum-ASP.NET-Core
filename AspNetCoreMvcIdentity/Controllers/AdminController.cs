@@ -40,9 +40,9 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateUserStatus(long userId, bool isActive)
+    public async Task<IActionResult> UpdateUserStatusAsync(long userId, bool isActive)
     {
-        _userService.UpdateUserStatus(userId, isActive);
+        await _userService.UpdateUserStatusAsync(userId, isActive);
         return RedirectToAction("Index");
     }
 
@@ -64,7 +64,7 @@ public class AdminController : Controller
             if (result.Succeeded)
             {
                 user.UserType = role;
-                _userService.Update(user);
+                await _userService.UpdateAsync(user);
             }
         }
         return RedirectToAction("Index");

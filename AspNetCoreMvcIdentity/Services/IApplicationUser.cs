@@ -13,8 +13,8 @@ namespace AspNetCoreMvcIdentity.Services
 
         Task SetProfileImage(long id, Uri uri);
         Task UpdateUserRating(string id, Type type);
-        void Update(ApplicationUser user);
-        void Delete(string id);
-        void UpdateUserStatus(long id, bool isActive);
+        Task UpdateAsync(ApplicationUser user);
+        Task DeleteAsync(string id);
+        Task UpdateUserStatusAsync(long id, bool isActive);
     }
 }

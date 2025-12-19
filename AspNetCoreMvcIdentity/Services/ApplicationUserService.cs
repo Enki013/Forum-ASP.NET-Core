@@ -63,29 +63,29 @@ namespace AspNetCoreMvcIdentity.Services
             await _context.SaveChangesAsync();
         }
 
-        public void Update(ApplicationUser user)
+        public async Task UpdateAsync(ApplicationUser user)
         {
             _context.ApplicationUsers.Update(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(string id)
+        public async Task DeleteAsync(string id)
         {
-            var user = _context.ApplicationUsers.Find(Convert.ToInt64(id));
+            var user = await _context.ApplicationUsers.FindAsync(Convert.ToInt64(id));
             if (user != null)
             {
                 _context.ApplicationUsers.Remove(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public void UpdateUserStatus(long userId, bool isActive)
+        public async Task UpdateUserStatusAsync(long userId, bool isActive)
         {
             var user = GetById(userId);
             if (user != null)
             {
                 user.IsActive = isActive;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
     }
