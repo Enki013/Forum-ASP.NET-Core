@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AspNetCoreMvcIdentity.Models.ForumViewModels
 {
     public class ForumIndexModel
     {
-        public IEnumerable<ForumListingModel> ForumList { get; set; }
+        public IEnumerable<ForumListingModel> ForumList { get; set; } = new List<ForumListingModel>();
     }
 }

@@ -14,7 +14,7 @@ namespace AspNetCoreMvcIdentity.Models.ManageViewModels
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Phone]
         [Display(Name = "Phone number")]
