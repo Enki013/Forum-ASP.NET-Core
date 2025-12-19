@@ -8,7 +8,7 @@ namespace AspNetCoreMvcIdentity.Services
 {
    public interface IPost
     {
-        Post GetById(int id);
+        Post? GetById(int id);
         IEnumerable<Post> GetAll();
         IEnumerable<Post> GetFilteredPosts(Forum forum, string searchQuery);
         IEnumerable<Post> GetFilteredPosts(string searchQuery);
@@ -21,7 +21,7 @@ namespace AspNetCoreMvcIdentity.Services
         Task AddReply(PostReply reply);
         IEnumerable<Post> GetLatestPosts(int n);
         IEnumerable<Post> GetMostPopularPosts(int n);
-        PostReply GetReplyById(int id);
+        PostReply? GetReplyById(int id);
         Task Update(Post post);
     }
 }

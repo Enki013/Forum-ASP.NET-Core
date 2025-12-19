@@ -5,6 +5,6 @@ namespace AspNetCoreMvcIdentity.Application.Common.Interfaces
 {
     public interface IUploadService
     {
-        Task<string> UploadFileAsync(IFormFile file);
+        Task<string?> UploadFileAsync(IFormFile file);
     }
 }

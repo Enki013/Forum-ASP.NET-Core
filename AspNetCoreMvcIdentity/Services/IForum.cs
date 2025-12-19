@@ -8,7 +8,7 @@ namespace AspNetCoreMvcIdentity.Services
 {
     public interface IForum
     {
-        Forum GetById(int id);
+        Forum? GetById(int id);
         IEnumerable<Forum> GetAll();
 
         Task Create(Forum forum);

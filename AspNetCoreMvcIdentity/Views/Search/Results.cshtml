@@ -3,12 +3,12 @@
     ViewData["Title"] = "Results";
 }
 
-<h1>Search results for: @Model?.SearchQuery</h1>
+<h1>Search results for: @Model.SearchQuery</h1>
 
 
 
 
-<div class= ="row">
+<div class="row">
     <form asp-controller="Search" asp-action="Search" method="post">
         <div class="row">
             <div class="form-group col-10">
@@ -19,7 +19,7 @@
                 </div>
     </form>
 </div>
-@if (Model?.Posts?.Any() == true)
+@if (Model.Posts.Any())
 {
 
     <table class="table table-bordered table-hover">

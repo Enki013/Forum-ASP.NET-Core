@@ -10,5 +10,5 @@ public class AdminDashboardViewModel
     public int TotalReplies { get; set; }
     public int TotalForums { get; set; }
     public int TotalViews { get; set; }
-    public IEnumerable<ApplicationUser> Users { get; set; }
+    public IEnumerable<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 }

@@ -9,7 +9,7 @@ namespace AspNetCoreMvcIdentity.Services
 {
     public interface IApplicationUser
     {
-        ApplicationUser GetById(long id);
+        ApplicationUser? GetById(long id);
         IEnumerable<ApplicationUser> GetAll();
         bool IsInRole(ApplicationUser user, string role);
 

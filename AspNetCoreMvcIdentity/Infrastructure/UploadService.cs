@@ -8,7 +8,7 @@ namespace AspNetCoreMvcIdentity.Infrastructure
 {
     public class UploadService : IUploadService
     {
-        public async Task<string> UploadFileAsync(IFormFile file)
+        public async Task<string?> UploadFileAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return null;

@@ -49,8 +49,9 @@ namespace AspNetCoreMvcIdentity.Services
 
         public IEnumerable<ApplicationUser> GetAllActiveUsers(int id)
         {
-            var posts = GetById(id).Posts;
-            if (posts != null || !posts.Any())
+            var forum = GetById(id);
+            var posts = forum?.Posts;
+            if (posts != null && posts.Any())
             {
                 var postUsers = posts.Select(p => p.User);
                 var replyUsers = posts.SelectMany(p => p.Replies).Select(r => r.User);
@@ -60,7 +61,7 @@ namespace AspNetCoreMvcIdentity.Services
             return new List<ApplicationUser>();
         }
 
-        public Forum GetById(int id)
+        public Forum? GetById(int id)
         {
             return _context.Forums.Where(f => f.Id == id)
                 .Include(f => f.Posts)

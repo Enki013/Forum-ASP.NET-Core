@@ -45,7 +45,7 @@ namespace AspNetCoreMvcIdentity.Controllers
         }
 
         [TempData]
-        public string StatusMessage { get; set; }
+        public string StatusMessage { get; set; } = string.Empty;
 
         [HttpGet]
         public async Task<IActionResult> Index()

@@ -52,7 +52,7 @@ namespace AspNetCoreMvcIdentity.Services
                 .Include(p => p.Forum);
         }
 
-        public Post GetById(int id)
+        public Post? GetById(int id)
         {
             return _context.Posts
                 .Include(p => p.User)
@@ -97,7 +97,7 @@ namespace AspNetCoreMvcIdentity.Services
             return _context.Forums.Where(f => f.Id == id)
                 .First().Posts;
         }
-        public PostReply GetReplyById(int id)
+        public PostReply? GetReplyById(int id)
         {
             return _context.PostReplays
                 .Include(r => r.User)

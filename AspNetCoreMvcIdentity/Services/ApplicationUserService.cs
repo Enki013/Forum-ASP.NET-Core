@@ -29,7 +29,7 @@ namespace AspNetCoreMvcIdentity.Services
             return _userManager.IsInRoleAsync(user, role).Result;
         }
 
-        public ApplicationUser GetById(long id)
+        public ApplicationUser? GetById(long id)
         {
             return GetAll().FirstOrDefault(u => u.Id == id);
         }
