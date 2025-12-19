@@ -21,16 +21,19 @@ namespace AspNetCoreMvcIdentity.Services
 
         public async Task Delete(int forumId)
         {
-            var forum = GetById(forumId);
+            var forum = await _context.Forums.FindAsync(forumId);
+            
             if (forum != null)
             {
-                var posts = forum.Posts.ToList();
+                // Explicitly load posts to delete them
+                var posts = _context.Posts.Where(p => p.Forum.Id == forumId).Include(p => p.Replies).ToList();
+                
                 foreach (var post in posts)
                 {
-                    var replies = _context.PostReplays.Where(r => r.Post.Id == post.Id);
-                    _context.PostReplays.RemoveRange(replies);
+                    _context.PostReplays.RemoveRange(post.Replies);
                     _context.Posts.Remove(post);
                 }
+
                 _context.Forums.Remove(forum);
                 await _context.SaveChangesAsync();
             }

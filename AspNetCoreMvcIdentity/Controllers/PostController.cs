@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCoreMvcIdentity.Models;
 using AspNetCoreMvcIdentity.Models.PostViewModels;
@@ -10,28 +9,26 @@ using AspNetCoreMvcIdentity.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using AspNetCoreMvcIdentity.Application.Posts.Commands.CreatePost;
 
 namespace AspNetCoreMvcIdentity.Controllers
 {
-    
     public class PostController : Controller
     {
         private readonly IForum _forum;
         private readonly IPost _post;
-        private readonly IApplicationUser _user;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMediator _mediator;
 
-        private static UserManager<ApplicationUser> _userManager;
-
-        public PostController(IPost post, IForum forum, UserManager<ApplicationUser> userManager, IApplicationUser user)
+        public PostController(IPost post, IForum forum, UserManager<ApplicationUser> userManager, IMediator mediator)
         {
             _post = post;
             _forum = forum;
             _userManager = userManager;
-            _user = user;
+            _mediator = mediator;
         }
 
-   
-        
         public async Task<IActionResult> IndexAsync(int id)
         {
             var post = _post.GetById(id);
@@ -88,21 +85,19 @@ namespace AspNetCoreMvcIdentity.Controllers
                 UserType = r.User.UserType 
             });
         }
-        ///////////////////////////////////////////////////////////////////////////
+        
         [Authorize]
         public IActionResult Create(int id)
         {
             var forum = _forum.GetById(id);
 
             var model = new NewPostModel
-                {
+            {
                 ForumName = forum.Title,
                 ForumId = forum.Id,
                 ForumImageUrl = forum.ImageUrl,
                 AuthorName = User.Identity.Name
-                
-
-                };
+            };
 
             return View(model);
         }
@@ -110,7 +105,6 @@ namespace AspNetCoreMvcIdentity.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            var user = _userManager.GetUserAsync(User).Result;
             var post = _post.GetById(id);
             var model = new PostListingModel
             {
@@ -124,49 +118,28 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-
         public IActionResult DeleteConfirmed(int id)
         {
-    // Bu satırlar, silinecek postun hangi foruma ait olduğunu buluyor
-
-          //  var redirect = _post.GetById(id).Forum.Id;
-    // Postu siliyor ve kullanıcıyı o forumun detay sayfasına yönlendiriyor
-            //_post.Delete(id);
-           //  return RedirectToAction("Details", "Forum", new { id = redirect   });
-    // Şu anki aktif kod: Postu siliyor ve ana sayfaya yönlendiriyor
             _post.Delete(id).Wait();
             return RedirectToAction("Index", "Home");
-
         }
-
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddPost(NewPostModel model)
         {
             var userId = _userManager.GetUserId(User);
-            var user =  _userManager.GetUserAsync(User).Result;
-            var post = BuildPost(model, user);
-             _post.Add(post).Wait();
-            await _user.UpdateUserRating(userId, typeof(Post));
-            //TODO Implement user rating
-            return RedirectToAction("Index", "Post", new { id = post.Id });
-        }
 
-        private Post BuildPost(NewPostModel model, ApplicationUser user)
-        {
-            var forum = _forum.GetById(model.ForumId);
-
-
-            return new Post
+            var command = new CreatePostCommand
             {
                 Title = model.Title,
                 Content = model.Content,
-                Created = DateTime.Now,
-                User = user,
-                Forum = forum
-
+                ForumId = model.ForumId,
+                UserId = userId
             };
+
+            var id = await _mediator.Send(command);
+            return RedirectToAction("Index", "Post", new { id = id });
         }
     }
 }

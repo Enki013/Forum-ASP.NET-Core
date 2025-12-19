@@ -56,9 +56,9 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _forum.Delete(id);
+            await _forum.Delete(id);
             return RedirectToAction("Index");
         }
 

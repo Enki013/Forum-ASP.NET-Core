@@ -3,6 +3,9 @@ using System.Threading;
 using AspNetCoreMvcIdentity.Data;
 using AspNetCoreMvcIdentity.Models;
 using AspNetCoreMvcIdentity.Services;
+using AspNetCoreMvcIdentity.Application.Common.Interfaces;
+using AspNetCoreMvcIdentity.Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -70,6 +73,11 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<IForum, ForumService>();
 builder.Services.AddScoped<IPost, PostService>();
 builder.Services.AddScoped<IApplicationUser, ApplicationUserService>();
+
+// Clean Architecture / CQRS Infrastructure
+builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //Seed Database
 builder.Services.AddTransient<DataSeed>();

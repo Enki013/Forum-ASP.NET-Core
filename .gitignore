@@ -118,3 +118,5 @@ FakesAssemblies/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+build_output.txt
