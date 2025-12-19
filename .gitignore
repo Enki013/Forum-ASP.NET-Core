@@ -120,3 +120,4 @@ FakesAssemblies/
 *.sln.iml
 
 build_output.txt
+*.png

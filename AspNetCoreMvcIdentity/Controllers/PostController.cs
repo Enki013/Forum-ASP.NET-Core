@@ -6,12 +6,15 @@ using AspNetCoreMvcIdentity.Models;
 using AspNetCoreMvcIdentity.Models.PostViewModels;
 using AspNetCoreMvcIdentity.Models.ReplyViewModels;
 using AspNetCoreMvcIdentity.Services;
+using AspNetCoreMvcIdentity.Application.Posts.Commands.CreatePost;
+using AspNetCoreMvcIdentity.Application.Posts.Commands.DeletePost;
+using AspNetCoreMvcIdentity.Application.Posts.Queries.GetPostById;
+using AspNetCoreMvcIdentity.Application.Forums.Queries.GetForumById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using AutoMapper;
-using AspNetCoreMvcIdentity.Application.Posts.Commands.CreatePost;
 
 namespace AspNetCoreMvcIdentity.Controllers
 {
@@ -34,7 +37,7 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         public async Task<IActionResult> IndexAsync(int id)
         {
-            var post = _post.GetById(id);
+            var post = await _mediator.Send(new GetPostByIdQuery { PostId = id });
             
             if (post == null)
             {
@@ -80,9 +83,9 @@ namespace AspNetCoreMvcIdentity.Controllers
         }
         
         [Authorize]
-        public IActionResult Create(int id)
+        public async Task<IActionResult> Create(int id)
         {
-            var forum = _forum.GetById(id);
+            var forum = await _mediator.Send(new GetForumByIdQuery { ForumId = id });
             if (forum == null)
             {
                 return NotFound();
@@ -100,9 +103,9 @@ namespace AspNetCoreMvcIdentity.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var post = _post.GetById(id);
+            var post = await _mediator.Send(new GetPostByIdQuery { PostId = id });
             if (post == null)
             {
                 return NotFound();
@@ -122,7 +125,7 @@ namespace AspNetCoreMvcIdentity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _post.Delete(id);
+            await _mediator.Send(new DeletePostCommand { PostId = id });
             return RedirectToAction("Index", "Home");
         }
 
@@ -133,7 +136,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             if (!ModelState.IsValid)
             {
                 // Rebuild the display model for the Create view
-                var forum = _forum.GetById(input.ForumId);
+                var forum = await _mediator.Send(new GetForumByIdQuery { ForumId = input.ForumId });
                 var model = new NewPostModel
                 {
                     ForumId = input.ForumId,

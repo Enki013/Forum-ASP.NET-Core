@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreMvcIdentity.Models;
 using AspNetCoreMvcIdentity.Models.ForumViewModels;
 using AspNetCoreMvcIdentity.Models.PostViewModels;
 using AspNetCoreMvcIdentity.Services;
+using AspNetCoreMvcIdentity.Application.Forums.Commands.DeleteForum;
+using AspNetCoreMvcIdentity.Application.Forums.Queries.GetForumById;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using MediatR;
 
 namespace AspNetCoreMvcIdentity.Controllers
 {
@@ -64,9 +65,9 @@ namespace AspNetCoreMvcIdentity.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var forum = _forum.GetById(id);
+            var forum = await _mediator.Send(new GetForumByIdQuery { ForumId = id });
             var model = _mapper.Map<ForumListingModel>(forum);
             return View(model);
         }
@@ -75,20 +76,19 @@ namespace AspNetCoreMvcIdentity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _forum.Delete(id);
+            await _mediator.Send(new DeleteForumCommand { ForumId = id });
             return RedirectToAction("Index");
         }
 
-        public IActionResult Details(int id, string searchQuery)
+        public async Task<IActionResult> Details(int id, string searchQuery)
         {
-            var posts = new List<Post>();
-            var forum = _forum.GetById(id);
+            var forum = await _mediator.Send(new GetForumByIdQuery { ForumId = id });
             if (forum == null)
             {
                 return NotFound();
             }
         
-            posts = _post.GetFilteredPosts(forum, searchQuery).ToList();
+            var posts = _post.GetFilteredPosts(forum, searchQuery).ToList();
        
             var postListings = posts.Select(p => {
                 var listing = _mapper.Map<PostListingModel>(p);

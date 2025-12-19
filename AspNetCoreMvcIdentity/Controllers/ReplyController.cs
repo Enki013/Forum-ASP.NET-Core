@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using AspNetCoreMvcIdentity.Models;
 using AspNetCoreMvcIdentity.Models.ReplyViewModels;
 using AspNetCoreMvcIdentity.Services;
+using AspNetCoreMvcIdentity.Application.Replies.Commands.CreateReply;
+using AspNetCoreMvcIdentity.Application.Posts.Queries.GetPostById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using AspNetCoreMvcIdentity.Application.Replies.Commands.CreateReply;
 
 namespace AspNetCoreMvcIdentity.Controllers
 {
@@ -29,7 +30,7 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         public async Task<IActionResult> Create(int id, int? parentReplyId, int? quotedReplyId)
         {
-            var post = _post.GetById(id);
+            var post = await _mediator.Send(new GetPostByIdQuery { PostId = id });
             if (post == null)
             {
                 return NotFound();
@@ -74,7 +75,7 @@ namespace AspNetCoreMvcIdentity.Controllers
             if (!ModelState.IsValid)
             {
                 // Rebuild the display model for the Create view
-                var post = _post.GetById(input.PostId);
+                var post = await _mediator.Send(new GetPostByIdQuery { PostId = input.PostId });
                 if (post == null) return NotFound();
                 
                 var postAuthor = post.User;
