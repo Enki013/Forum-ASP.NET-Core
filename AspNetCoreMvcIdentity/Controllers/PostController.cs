@@ -126,15 +126,31 @@ namespace AspNetCoreMvcIdentity.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddPost(NewPostModel model)
+        public async Task<IActionResult> AddPost(CreatePostInput input)
         {
+            if (!ModelState.IsValid)
+            {
+                // Rebuild the display model for the Create view
+                var forum = _forum.GetById(input.ForumId);
+                var model = new NewPostModel
+                {
+                    ForumId = input.ForumId,
+                    ForumName = forum?.Title,
+                    ForumImageUrl = forum?.ImageUrl,
+                    AuthorName = User.Identity?.Name,
+                    Title = input.Title,
+                    Content = input.Content
+                };
+                return View("Create", model);
+            }
+
             var userId = _userManager.GetUserId(User);
 
             var command = new CreatePostCommand
             {
-                Title = model.Title,
-                Content = model.Content,
-                ForumId = model.ForumId,
+                Title = input.Title,
+                Content = input.Content,
+                ForumId = input.ForumId,
                 UserId = userId
             };
 

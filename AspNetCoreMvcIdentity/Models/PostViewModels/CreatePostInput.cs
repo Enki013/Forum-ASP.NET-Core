@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AspNetCoreMvcIdentity.Models.PostViewModels
 {
-    public class NewPostModel
+    /// <summary>
+    /// Input DTO for creating a new post. Only contains user-submitted fields.
+    /// </summary>
+    public class CreatePostInput
     {
-        public string ForumName { get; set; }
-        public string AuthorName { get; set; }
-        public string ForumImageUrl { get; set; }
         public int ForumId { get; set; }
         
         [Required(ErrorMessage = "Title is required")]
@@ -20,9 +16,5 @@ namespace AspNetCoreMvcIdentity.Models.PostViewModels
         [Required(ErrorMessage = "Content is required")]
         [MinLength(1, ErrorMessage = "Content cannot be empty")]
         public string Content { get; set; }
-        
-        public string UserId { get; set; }
-        public int? ParentReplyId { get; set; } // Added this line to resolve the error
     }
 }
-

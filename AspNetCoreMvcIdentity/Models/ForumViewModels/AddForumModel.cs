@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreMvcIdentity.Models.ForumViewModels
 {
+    /// <summary>
+    /// Input DTO for creating a new forum. Only contains user-submitted fields.
+    /// </summary>
     public class AddForumModel
     {
         [Required(ErrorMessage = "Title is required")]
@@ -15,11 +18,9 @@ namespace AspNetCoreMvcIdentity.Models.ForumViewModels
         
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
-        
-        public string ImageUrl { get; set; }
 
         [AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png", ".gif" })]
         [MaxFileSize(5 * 1024 * 1024)] // 5MB
-        public IFormFile ImageUpload { get; set; }
+        public IFormFile? ImageUpload { get; set; }
     }
 }

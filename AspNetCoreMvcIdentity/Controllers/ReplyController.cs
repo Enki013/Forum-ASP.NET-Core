@@ -69,22 +69,50 @@ namespace AspNetCoreMvcIdentity.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddReply(PostReplyModel model)
+        public async Task<IActionResult> AddReply(CreateReplyInput input)
         {
+            if (!ModelState.IsValid)
+            {
+                // Rebuild the display model for the Create view
+                var post = _post.GetById(input.PostId);
+                if (post == null) return NotFound();
+                
+                var postAuthor = post.User;
+                var model = new PostReplyModel
+                {
+                    PostId = post.Id,
+                    PostTitle = post.Title,
+                    PostContent = post.Content,
+                    AuthorId = postAuthor.Id.ToString(),
+                    AuthorName = postAuthor.UserName,
+                    AuthorImageUrl = postAuthor.GetProfileImageUrl(),
+                    AuthorRating = postAuthor.Rating,
+                    IsAuthorAdmin = await _userManager.IsInRoleAsync(postAuthor, "Admin"),
+                    Created = post.Created,
+                    ForumId = post.Forum.Id,
+                    ForumName = post.Forum.Title,
+                    ForumImageUrl = post.Forum.ImageUrl,
+                    ParentReplyId = input.ParentReplyId,
+                    ReplyContent = input.ReplyContent,
+                    UserType = postAuthor.UserType
+                };
+                return View("Create", model);
+            }
+
             var userId = _userManager.GetUserId(User);
 
             var command = new CreateReplyCommand
             {
-                PostId = model.PostId,
-                Content = model.ReplyContent,
+                PostId = input.PostId,
+                Content = input.ReplyContent,
                 AuthorId = userId,
-                ParentReplyId = model.ParentReplyId,
-                QuotedReplyId = model.QuotedReplyId
+                ParentReplyId = input.ParentReplyId,
+                QuotedReplyId = input.QuotedReplyId
             };
 
             await _mediator.Send(command);
 
-            return RedirectToAction("Index", "Post", new { id = model.PostId });
+            return RedirectToAction("Index", "Post", new { id = input.PostId });
         }
     }
 }

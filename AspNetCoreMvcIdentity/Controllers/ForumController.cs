@@ -118,6 +118,11 @@ namespace AspNetCoreMvcIdentity.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddForum(AddForumModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", model);
+            }
+
             var command = new AspNetCoreMvcIdentity.Application.Forums.Commands.CreateForum.CreateForumCommand
             {
                 Title = model.Title,

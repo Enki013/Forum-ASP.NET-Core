@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,9 @@ namespace AspNetCoreMvcIdentity.Models.ReplyViewModels
         public string AuthorImageUrl { get; set; }
         public int AuthorRating { get; set; }
         public DateTime Created { get; set; }
+        
+        [Required(ErrorMessage = "Reply content is required")]
+        [MinLength(1, ErrorMessage = "Reply content cannot be empty")]
         public string ReplyContent { get; set; }
         public bool IsAuthorAdmin { get; set; }
 
