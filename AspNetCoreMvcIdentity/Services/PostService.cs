@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreMvcIdentity.Data;
@@ -8,13 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreMvcIdentity.Services
 {
-    public class PostService : IPost
+    public class PostService(ApplicationDbContext context) : IPost
     {
-        private readonly ApplicationDbContext _context;
-        public PostService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
         public async Task Add(Post post)
         {
             _context.Add(post);

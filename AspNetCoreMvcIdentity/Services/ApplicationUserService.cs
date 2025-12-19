@@ -4,20 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace AspNetCoreMvcIdentity.Services
 {
-    public class ApplicationUserService : IApplicationUser
+    public class ApplicationUserService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : IApplicationUser
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public ApplicationUserService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public IEnumerable<ApplicationUser> GetAll()
         {
