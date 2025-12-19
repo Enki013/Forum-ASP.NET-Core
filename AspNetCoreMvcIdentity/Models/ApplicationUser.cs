@@ -20,8 +20,8 @@ namespace AspNetCoreMvcIdentity.Models
         public string? ProfileImageUrl { get; set; }
         public DateTime MemberSince { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<Post> Posts { get; set; }
-        public ICollection<PostReply> Replies { get; set; }
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+        public ICollection<PostReply> Replies { get; set; } = new List<PostReply>();
         public string? UserType { get; set; } // "Admin", "Mod", or "User"
         public string? StatusMessage { get; set; } // User's profile status message
     }
